@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>GW2 Deco Tools v7.3 (External JS)</title>
+  <title>GW2 Deco Tools v7.3.2</title>
 
   <!-- Strict CSP: no inline scripts/styles, only same-origin resources -->
   <meta http-equiv="Content-Security-Policy"
@@ -130,7 +130,7 @@
     <div class="section-title">Map Swap Tool</div>
 
     <div class="note-box">
-      Change the Homestead map associated with your decoration XML.<br><br>
+      Change the Homestead or Guild Hall map associated with your decoration XML.<br><br>
       After swapping maps, you may need to use the 
       <span class="link-like" data-switch-tab="tool-mover">
         Deco Mover Tool
@@ -167,15 +167,14 @@
 
     <div class="note-box">
       Merge decorations from one XML into another.<br><br>
-      All <code>&lt;prop&gt;</code> lines from the second XML will be added under the 
-      <code>&lt;Decorations&gt;</code> tag of the original XML, just below the existing props.<br><br>
-      A comment line will be inserted above the merged props containing the clean name of the added XML, e.g.:<br>
-      <code>&lt;!-- MyLayoutName --&gt;</code>
+      <strong>Original Deco Layout:</strong> The XML containing your homestead or guild hall's current layout.<br>
+      <strong>Add Decos:</strong> XML file of the new decoration grouping you would like to add.<br><br>
+      Merging will download a new file with a name reflecting the merge completed. This tool works in conjunction with the <strong>Deco Extractor</strong> tool.
     </div>
 
     <div class="grid3">
       <div>
-        <label>Original Deco Layout XML</label>
+        <label>Original Deco Layout</label>
         <div class="drop-zone">
           <div class="drop-zone-icon">📄</div>
           <div class="drop-zone-text">Drop XML here or click to browse</div>
@@ -183,7 +182,7 @@
         </div>
       </div>
       <div>
-        <label>Add Decos XML</label>
+        <label>Add Decos</label>
         <div class="drop-zone">
           <div class="drop-zone-icon">📄</div>
           <div class="drop-zone-text">Drop XML here or click to browse</div>
@@ -204,7 +203,7 @@
     <div class="section-title">Deco Extraction Tool</div>
 
     <div class="note-box">
-      This tool lets you extract specific deco groups that were previously merged using the <strong>Deco Merger</strong> tool.<br><br>
+      This tool lets you extract specific decoration groups that were previously merged using the <strong>Deco Merger</strong> tool.<br><br>
       <strong>Important:</strong> The Deco Extraction tool ONLY works on XML documents assembled with the Deco Merger Tool, 
       where group boundaries are marked by comment lines like:<br>
       <code>&lt;!-- GroupName --&gt;</code>
