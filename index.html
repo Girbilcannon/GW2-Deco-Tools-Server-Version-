@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>GW2 Deco Tools v7.3.2</title>
+  <title>GW2 Deco Tools v7.4.0</title>
 
   <!-- Strict CSP: no inline scripts/styles, only same-origin resources -->
   <meta http-equiv="Content-Security-Policy"
@@ -166,10 +166,12 @@
     <div class="section-title">Deco Merger Tool</div>
 
     <div class="note-box">
-      Merge decorations from one XML into another.<br><br>
+      Merge decorations from multiple XMLs into one layout.<br><br>
       <strong>Original Deco Layout:</strong> The XML containing your homestead or guild hall's current layout.<br>
-      <strong>Add Decos:</strong> XML file of the new decoration grouping you would like to add.<br><br>
-      Merging will download a new file with a name reflecting the merge completed. This tool works in conjunction with the <strong>Deco Extractor</strong> tool.
+      <strong>Add Decos:</strong> One or more XML files of the new decoration groupings you would like to add.<br><br>
+      Each added file will be marked with a comment line using its filename (without <code>.xml</code>), 
+      which can later be used by the <strong>Deco Extraction</strong> tool to pull groups back out.<br><br>
+      Merging will download a new file ending in <code>_MERGED.xml</code>.
     </div>
 
     <div class="grid3">
@@ -182,11 +184,11 @@
         </div>
       </div>
       <div>
-        <label>Add Decos</label>
+        <label>Add Decos (one or more XML files)</label>
         <div class="drop-zone">
           <div class="drop-zone-icon">📄</div>
-          <div class="drop-zone-text">Drop XML here or click to browse</div>
-          <input type="file" id="merge-add" accept=".xml">
+          <div class="drop-zone-text">Drop XML(s) here or click to browse</div>
+          <input type="file" id="merge-add" accept=".xml" multiple>
         </div>
       </div>
     </div>

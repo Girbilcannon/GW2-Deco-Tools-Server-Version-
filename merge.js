@@ -1,56 +1,81 @@
 function runMerge() {
   const originalFile = document.getElementById("merge-original").files[0];
-  const addFile = document.getElementById("merge-add").files[0];
+  const addFilesList = document.getElementById("merge-add").files;
 
-  if (!originalFile || !addFile) {
-    alert("Please select both the Original and Add Decos XML files.");
+  if (!originalFile) {
+    alert("Please select an Original Deco Layout XML file.");
     return;
   }
 
+  if (!addFilesList || !addFilesList.length) {
+    alert("Please select at least one Add Decos XML file.");
+    return;
+  }
+
+  const addFiles = Array.from(addFilesList);
+
   loadXML(originalFile, originalXML => {
-    loadXML(addFile, addXML => {
-      const origDecor = originalXML.getElementsByTagName("Decorations")[0];
-      if (!origDecor) {
-        alert("No <Decorations> tag found in Original XML.");
+    const origDecor = originalXML.getElementsByTagName("Decorations")[0];
+    if (!origDecor) {
+      alert("No <Decorations> tag found in Original XML.");
+      return;
+    }
+
+    // Process add files sequentially to keep ordering
+    function processNext(index) {
+      if (index >= addFiles.length) {
+        // All add-files handled -> serialize & download
+        const serializer = new XMLSerializer();
+        let mergedXML = serializer.serializeToString(originalXML);
+        mergedXML = prettyPrintXML(mergedXML);
+
+        const baseOrig = originalFile.name.replace(/\.xml$/i, "");
+        const outName  = `${baseOrig}_MERGED.xml`;
+
+        downloadBlob(mergedXML, outName, "application/xml");
         return;
       }
 
-      const addDecor = addXML.getElementsByTagName("Decorations")[0];
-      if (!addDecor) {
-        alert("No <Decorations> tag found in Add Decos XML.");
-        return;
-      }
+      const addFile = addFiles[index];
 
-      const addProps = addDecor.getElementsByTagName("prop");
-      if (!addProps.length) {
-        alert("No <prop> entries found in Add Decos XML.");
-        return;
-      }
+      loadXML(addFile, addXML => {
+        const addDecor = addXML.getElementsByTagName("Decorations")[0];
+        if (!addDecor) {
+          // No decorations in this file – skip but continue the chain
+          console.warn(`No <Decorations> tag found in Add Decos XML: ${addFile.name}`);
+          processNext(index + 1);
+          return;
+        }
 
-      // Comment based on second file name (no .xml)
-      const addBaseName = addFile.name.replace(/\.xml$/i, "");
-      const commentNode = originalXML.createComment(addBaseName);
+        const addProps = addDecor.getElementsByTagName("prop");
+        if (!addProps.length) {
+          // No props – skip but continue
+          console.warn(`No <prop> entries found in Add Decos XML: ${addFile.name}`);
+          processNext(index + 1);
+          return;
+        }
 
-      // Insert newline + comment + newline for readability
-      origDecor.appendChild(originalXML.createTextNode("\n  "));
-      origDecor.appendChild(commentNode);
-      origDecor.appendChild(originalXML.createTextNode("\n  "));
+        // Comment based on this add file's name (no .xml)
+        const addBaseName = addFile.name.replace(/\.xml$/i, "");
+        const commentNode = originalXML.createComment(addBaseName);
 
-      // Append merged props after comment
-      for (let i = 0; i < addProps.length; i++) {
-        const importedProp = originalXML.importNode(addProps[i], true);
-        origDecor.appendChild(importedProp);
+        // Insert newline + comment + newline for readability
         origDecor.appendChild(originalXML.createTextNode("\n  "));
-      }
+        origDecor.appendChild(commentNode);
+        origDecor.appendChild(originalXML.createTextNode("\n  "));
 
-      const serializer = new XMLSerializer();
-      let mergedXML = serializer.serializeToString(originalXML);
-      mergedXML = prettyPrintXML(mergedXML);
+        // Append merged props after comment
+        for (let i = 0; i < addProps.length; i++) {
+          const importedProp = originalXML.importNode(addProps[i], true);
+          origDecor.appendChild(importedProp);
+          origDecor.appendChild(originalXML.createTextNode("\n  "));
+        }
 
-      const baseOrig = originalFile.name.replace(/\.xml$/i, "");
-      const outName  = `${baseOrig}_MERGE_${addBaseName}.xml`;
+        // Move on to the next add file
+        processNext(index + 1);
+      });
+    }
 
-      downloadBlob(mergedXML, outName, "application/xml");
-    });
+    processNext(0);
   });
 }

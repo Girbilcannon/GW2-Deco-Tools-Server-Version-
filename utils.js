@@ -64,7 +64,9 @@ function setupDropZones() {
     const text = zone.querySelector(".drop-zone-text");
 
     const resetLabel = () => {
-      if (text) text.textContent = "Drop XML here or click to browse";
+      if (text) text.textContent = input.multiple
+        ? "Drop XML(s) here or click to browse"
+        : "Drop XML here or click to browse";
     };
 
     zone.addEventListener("click", () => {
@@ -72,11 +74,15 @@ function setupDropZones() {
     });
 
     input.addEventListener("change", () => {
-      const file = input.files[0];
-      if (file) {
-        if (text) text.textContent = "Loaded: " + file.name;
-      } else {
+      const files = Array.from(input.files || []);
+      if (!files.length) {
         resetLabel();
+        return;
+      }
+      if (files.length === 1) {
+        if (text) text.textContent = "Loaded: " + files[0].name;
+      } else {
+        if (text) text.textContent = "Loaded: " + files.length + " files";
       }
     });
 
@@ -93,16 +99,32 @@ function setupDropZones() {
     zone.addEventListener("drop", e => {
       e.preventDefault();
       zone.classList.remove("dragover");
-      const file = e.dataTransfer.files[0];
-      if (!file) return;
-      if (!file.name.toLowerCase().endsWith(".xml")) {
-        alert("Please drop an XML file.");
+
+      const files = Array.from(e.dataTransfer.files || []);
+      if (!files.length) return;
+
+      const xmlFiles = files.filter(f => f.name.toLowerCase().endsWith(".xml"));
+      if (!xmlFiles.length) {
+        alert("Please drop XML file(s).");
         return;
       }
+
       const dt = new DataTransfer();
-      dt.items.add(file);
+      if (input.multiple) {
+        xmlFiles.forEach(f => dt.items.add(f));
+      } else {
+        dt.items.add(xmlFiles[0]);
+      }
       input.files = dt.files;
-      if (text) text.textContent = "Loaded: " + file.name;
+
+      if (xmlFiles.length === 1 || !input.multiple) {
+        if (text) text.textContent = "Loaded: " + xmlFiles[0].name;
+      } else {
+        if (text) text.textContent = "Loaded: " + xmlFiles.length + " files";
+      }
     });
+
+    // Initialize default label
+    resetLabel();
   });
 }
