@@ -209,6 +209,12 @@ body.light .drop-zone.dragover {
   background: rgba(35,210,255,0.08);
 }
 
+/* Disabled drop zones (used when Bring Deco to World Zero is checked) */
+.drop-zone.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
 /* ===========================
    BUTTONS
    =========================== */
@@ -319,6 +325,20 @@ pre {
 /* Map choice title */
 .map-choice-label {
   margin-bottom: 8px;
+}
+
+/* Checkbox row for Bring Deco to World Zero */
+.checkbox-row {
+  margin-bottom: 12px;
+}
+
+.checkbox-row label {
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.checkbox-row input[type="checkbox"] {
+  margin-right: 6px;
 }
 
 /* ===========================

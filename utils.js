@@ -70,6 +70,7 @@ function setupDropZones() {
     };
 
     zone.addEventListener("click", () => {
+      if (input.disabled) return;
       input.click();
     });
 
@@ -87,16 +88,19 @@ function setupDropZones() {
     });
 
     zone.addEventListener("dragover", e => {
+      if (input.disabled) return;
       e.preventDefault();
       zone.classList.add("dragover");
     });
 
     zone.addEventListener("dragleave", e => {
+      if (input.disabled) return;
       e.preventDefault();
       zone.classList.remove("dragover");
     });
 
     zone.addEventListener("drop", e => {
+      if (input.disabled) return;
       e.preventDefault();
       zone.classList.remove("dragover");
 

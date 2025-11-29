@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>GW2 Deco Tools v7.4.0</title>
+  <title>GW2 Deco Tools v7.5.0</title>
 
   <!-- Strict CSP: no inline scripts/styles, only same-origin resources -->
   <meta http-equiv="Content-Security-Policy"
@@ -50,7 +50,21 @@
     <div class="note-box">
       Moves all decorations in the main XML by shifting them from a source location to a destination location. 
       To get a Start and End location, simply clear your decorations, place a box or any object in its rough location, 
-      save it as a new file, move the box to a new spot, and then save a new file for end location.
+      save it as a new file, move the box to a new spot, and then save a new file for end location.<br><br>
+
+      <strong>WORLD ZERO CHECK BOX:</strong><br>
+      If you would like to simply move your grouped decorations to a position of "absolute zero," simply check this box.
+      It will average out your deco locations and move them to the very center of the map. This feature is especially
+      helpful when doing a map swap, and your current layout position is out of bounds.<br><br>
+      <em>Please note that the world zero position rests under the ground in some maps, and will still require a 
+       traditional move to make it visible and where you want it placed.</em>
+    </div>
+
+    <div class="checkbox-row">
+      <label>
+        <input type="checkbox" id="mover-worldzero">
+        Bring Deco to World Zero
+      </label>
     </div>
 
     <div class="grid3">

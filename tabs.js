@@ -85,6 +85,14 @@ function attachToolHandlers() {
   if (extractBtn && typeof extractSelectedGroups === "function") {
     extractBtn.addEventListener("click", extractSelectedGroups);
   }
+
+  // New: wire up "Bring Deco to World Zero" checkbox
+  const zeroCheckbox = document.getElementById("mover-worldzero");
+  if (zeroCheckbox && typeof updateMoverMode === "function") {
+    zeroCheckbox.addEventListener("change", updateMoverMode);
+    // Initialize mode on load
+    updateMoverMode();
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
